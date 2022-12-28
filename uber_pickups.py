@@ -31,7 +31,10 @@ st.subheader('Number of pickups by hour')
 hist_values = np.histogram(data[DATE_COLUMN].dt.hour,bins=24,range=(0,24))[0]
 st.bar_chart(hist_values)
 
-hour_to_filter = st.slider('hour',0,23,17) #min: 0h, max:23h, defaults to 17 - the busiest time
+busiest_hour = data[DATE_COLUMN].dt.hour.mode()
+st.write(f"Hour {int(busiest_hour)} is the busiest, and will be used as the default.")
+
+hour_to_filter = st.slider('hour',0,23,int(busiest_hour)) #min: 0h, max:23h, defaults to the busiest time
 filtered_data = data[data[DATE_COLUMN].dt.hour == hour_to_filter]
 st.subheader(f'Map of all pickups at {hour_to_filter}:00')
 st.map(filtered_data)
